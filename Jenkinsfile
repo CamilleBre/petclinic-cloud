@@ -40,6 +40,7 @@ pipeline {
                   mkdir .aws
                   cat $CREDENTIAL > .aws/credentials
                   ls 
+                  kubectl get nodes
                   cat .kube/config
                   cat .aws/credentials
                   
