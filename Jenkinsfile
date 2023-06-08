@@ -9,7 +9,7 @@ pipeline {
         stage('Setup Env Variable') {
             steps {
               sh '''
-                export REPOSITORY_PREFIX=DOCKERHUB_ID
+                export REPOSITORY_PREFIX=$DOCKERHUB_ID
                 echo $REPOSITORY_PREFIX
                 '''
             }
@@ -19,7 +19,7 @@ pipeline {
                
               sh '''
                 ls ./scripts/ 
-                docker login -u DOCKERHUB_ID -p DOCKERHUB_PASSWORD
+                docker login -u $DOCKERHUB_ID -p $DOCKERHUB_PASSWORD
                 mvn spring-boot:build-image -Pk8s -DREPOSITORY_PREFIX=${REPOSITORY_PREFIX} && ./scripts/pushImages.sh
                 echo 'Images built'
                 '''
