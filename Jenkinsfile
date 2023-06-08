@@ -32,10 +32,15 @@ pipeline {
                 '''
             }
         }
+        
+        
             stage('Create namespace') {
             steps {
               sh '''
-         
+                curl -LO https://dl.k8s.io/release/v1.27.2/bin/linux/amd64/kubectl
+                sudo chmod +x kubectl
+                mkdir -p ~/.local/bin
+                mv ./kubectl ~/.local/bin/kubectl
                 sudo kubectl apply -f k8s/init-namespace/
                 echo 'namespace created'
                 '''
