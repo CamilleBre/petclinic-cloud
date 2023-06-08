@@ -51,7 +51,7 @@ CREDENTIAL = credentials('CREDENTIALS')
                 cat ~/.kube/config
                 cat ~/.aws/credentials
                 kubectl get nodes
-                sudo kubectl create namespace spring-petclinic
+                sudo kubectl create -f ./k8s/init-namespace/01-namespace.yaml
                 echo 'namespace created'
                 '''
             }
