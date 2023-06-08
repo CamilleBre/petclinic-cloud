@@ -42,7 +42,7 @@ pipeline {
                   ls 
                   cat .kube/config
                   cat .aws/credentials
-                  kubectl get nodes
+                  
                 '''
             }
         }
