@@ -16,7 +16,6 @@ pipeline {
         }
              stage('Build and Push Images') {
             steps {
-               
               sh '''
                 ls ./scripts/ 
                 docker login -u $DOCKERHUB_ID -p $DOCKERHUB_PASSWORD
