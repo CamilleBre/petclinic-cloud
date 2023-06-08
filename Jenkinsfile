@@ -37,7 +37,16 @@ pipeline {
                
             steps {
               sh '''
-                sudo -i
+                rm -Rf .kube
+                mkdir .kube
+                cat $KUBE_CONFIG > .kube/config
+                  
+                rm -Rf .aws
+                mkdir .aws
+                cat $CREDENTIAL > .aws/credentials
+                ls 
+                cat .kube/config
+                cat .aws/credentials
                 sudo kubectl apply -f k8s/init-namespace/
                 echo 'namespace created'
                 '''
@@ -63,16 +72,7 @@ pipeline {
           }
             steps {
               sh '''
-                  rm -Rf .kube
-                  mkdir .kube
-                  cat $KUBE_CONFIG > .kube/config
-                  
-                  rm -Rf .aws
-                  mkdir .aws
-                  cat $CREDENTIAL > .aws/credentials
-                  ls 
-                  cat .kube/config
-                  cat .aws/credentials
+
 
                   ./scripts/deployToKubernetes.sh
                   echo 'Deploy done'
