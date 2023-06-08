@@ -35,7 +35,8 @@ pipeline {
             stage('Create namespace') {
             steps {
               sh '''
-                kubectl apply -f k8s/init-namespace/
+         
+                sudo kubectl apply -f k8s/init-namespace/
                 echo 'namespace created'
                 '''
             }
@@ -44,8 +45,8 @@ pipeline {
              stage('Create services') {
             steps {
               sh '''
-                kubectl apply -f k8s/init-services
-                kubectl get svc -n spring-petclinic
+                sudo kubectl apply -f k8s/init-services
+                sudo kubectl get svc -n spring-petclinic
                 echo 'Services created'
                 '''
             }
