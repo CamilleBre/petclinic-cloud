@@ -426,3 +426,21 @@ For pull requests, editor preferences are available in the [editor config](.edit
 
 [Configuration repository]: https://github.com/spring-petclinic/spring-petclinic-microservices-config
 [Spring Boot Actuator Production Ready Metrics]: https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-metrics.html
+
+---------------------------------------------------------------------------------##Jenkins CICD
+1- Setup an env variable to target your Docker registry:
+        - export REPOSITORY_PREFIX=dockerdev27
+2- To build all images and pushing them to your registry, run:
+        - mvn spring-boot:build-image -Pk8s -DREPOSITORY_PREFIX=${REPOSITORY_PREFIX} && ./scripts/pushImages.sh
+3- Create the spring-petclinic namespace for Spring petclinic:
+        - kubectl apply -f k8s/init-namespace/ 
+4- Create the Kubernetes services that will be used later on by our deployments:
+        - kubectl apply -f k8s/init-services
+5- Verify the services are available:
+        - kubectl get svc -n spring-petclinic
+6- Our deployment YAMLs have a placeholder called REPOSITORY_PREFIX so we'll be able to deploy the images from any Docker registry. Sadly, Kubernetes doesn't support environment variables in the YAML descriptors. We have a small script to do it for us and run our deployments:
+        - ./scripts/deployToKubernetes.sh
+7- Verify the pods are deployed:
+        - kubectl get pods -n spring-petclinic 
+8- Get the EXTERNAL-IP of the API Gateway:
+        - kubectl get svc -n spring-petclinic api-gateway
