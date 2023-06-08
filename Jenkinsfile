@@ -20,7 +20,7 @@ pipeline {
               sh '''
                 ls ./scripts/ 
                 docker login -u $DOCKERHUB_ID -p $DOCKERHUB_PASSWORD
-                mvn spring-boot:build-image -Pk8s -DREPOSITORY_PREFIX=${REPOSITORY_PREFIX} && ./scripts/pushImages.sh
+                mvn spring-boot:build-image -Pk8s -DREPOSITORY_PREFIX=$DOCKERHUB_ID && ./scripts/pushImages.sh
                 echo 'Images built'
                 '''
             }
