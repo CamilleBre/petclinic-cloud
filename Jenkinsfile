@@ -63,13 +63,12 @@ CREDENTIAL = credentials('CREDENTIALS')
              stage('Create services') {
             steps {
               sh '''
-                
+                sudo kubectl apply -f k8s/init-services/02-config-map.yaml
                 sudo kubectl apply -f k8s/init-services/03-role.yaml
                 sudo kubectl apply -f k8s/init-services/05-api-gateway-service.yaml
                 sudo kubectl apply -f k8s/init-services/06-customers-service-service.yaml
                 sudo kubectl apply -f k8s/init-services/07-vets-service-service.yaml 
                 sudo kubectl apply -f k8s/init-services/08-visits-service-service.yaml
-                sudo kubectl apply -f k8s/init-services/02-config-map.yaml
                 sudo kubectl get svc -n spring-petclinic
                 echo 'Services created'
                 '''
