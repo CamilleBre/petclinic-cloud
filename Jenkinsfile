@@ -2,29 +2,43 @@ pipeline {
     agent any
    
     stages {
-        stage('Build') {
+        stage('Setup Env Variable') {
             steps {
               sh '''
-                echo 'Build de Jenkins'
+                export REPOSITORY_PREFIX=dockerdev27
+                echo $REPOSITORY_PREFIX
                 '''
             }
         }
-             stage('Test') {
+             stage('Build and Push Images') {
             steps {
               sh '''
-                echo 'Test de Jenkins'
+                mvn spring-boot:build-image -Pk8s -DREPOSITORY_PREFIX=${REPOSITORY_PREFIX} && ./scripts/pushImages.sh
+                echo 'Images built'
+                '''
+            }
+        }
+            stage('Create namespace') {
+            steps {
+              sh '''
+                kubectl apply -f k8s/init-namespace/
+                echo 'namespace created'
+                '''
+            }
+
+        }
+             stage('Create services') {
+            steps {
+              sh '''
+                kubectl apply -f k8s/init-services
+                kubectl get svc -n spring-petclinic
+                echo 'Services created'
                 '''
             }
         }
       
-             stage('Push') {
-            steps {
-              sh '''
-                echo 'Push de Jenkins'
-                '''
-            }
-        }
-      
+
+
           stage('Deploy to K8s') {
           environment {
             CREDENTIAL = credentials('CREDENTIALS')
@@ -42,7 +56,9 @@ pipeline {
                   ls 
                   cat .kube/config
                   cat .aws/credentials
-                  
+
+                  ./scripts/deployToKubernetes.sh
+                  echo 'Deploy done'
                 '''
             }
         }
