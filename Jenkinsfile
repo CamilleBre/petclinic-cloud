@@ -20,7 +20,14 @@ pipeline {
               sh '''
                 ls ./scripts/ 
                 docker login -u $DOCKERHUB_ID -p $DOCKERHUB_PASSWORD
-                mvn spring-boot:build-image -Pk8s -DREPOSITORY_PREFIX=$DOCKERHUB_ID && ./scripts/pushImages.sh
+                mvn spring-boot:build-image -Pk8s -DREPOSITORY_PREFIX=$DOCKERHUB_ID 
+                docker push $DOCKERHUB_ID/spring-petclinic-cloud-api-gateway:latest
+                docker push $DOCKERHUB_ID/spring-petclinic-cloud-visits-service:latest
+                docker push $DOCKERHUB_ID/spring-petclinic-cloud-vets-service:latest
+                docker push $DOCKERHUB_ID/spring-petclinic-cloud-customers-service:latest
+                docker push $DOCKERHUB_ID/spring-petclinic-cloud-admin-server:latest
+                docker push $DOCKERHUB_ID/spring-petclinic-cloud-discovery-service:latest
+                docker push $DOCKERHUB_ID/spring-petclinic-cloud-config-server:latest
                 echo 'Images built'
                 '''
             }
