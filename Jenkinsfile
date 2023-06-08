@@ -34,14 +34,10 @@ pipeline {
         
         
             stage('Create namespace') {
-                 agent {
-                docker {
-                    image 'bitnami/kubectl:1.24.14'
-                }
-         }
+               
             steps {
               sh '''
-
+                sudo -i
                 sudo kubectl apply -f k8s/init-namespace/
                 echo 'namespace created'
                 '''
