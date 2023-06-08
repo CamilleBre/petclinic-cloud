@@ -53,7 +53,7 @@ CREDENTIAL = credentials('CREDENTIALS')
                 kubectl get nodes
                 kubectl apply -f  role.yaml
                 kubectl apply -f k8s/init-namespace/ 
-                sudo kubectl create -f ~/role.yaml
+                
                 
                 echo 'namespace created'
                 '''
