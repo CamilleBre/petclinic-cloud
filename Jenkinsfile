@@ -12,10 +12,11 @@ pipeline {
         }
              stage('Build and Push Images') {
             steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']], userRemoteConfigs: [[url: 'https://github.com/Saidfali/spring-petclinic-cloud.git']]])
               sh '''
                 echo 'REPOSITORY_PREFIX',$REPOSITORY_PREFIX
                 mvn spring-boot:build-image -Pk8s -DREPOSITORY_PREFIX=${REPOSITORY_PREFIX}
-                https://github.com/Saidfali/spring-petclinic-cloud/blob/master/scripts/pushImages.sh
+                ./scripts/pushImages.sh
                 echo 'Images built'
                 '''
             }
