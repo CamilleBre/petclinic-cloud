@@ -2,6 +2,8 @@ pipeline {
     environment {
         DOCKERHUB_ID = "dockerdev27"
         DOCKERHUB_PASSWORD = credentials('dockerhub_password')
+        KUBE_CONFIG = credentials('config')
+CREDENTIAL = credentials('CREDENTIALS')
     }
     agent any
    
