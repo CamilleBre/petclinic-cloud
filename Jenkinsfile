@@ -13,7 +13,7 @@ pipeline {
              stage('Build and Push Images') {
             steps {
               sh '''
-                mvn spring-boot:build-image -Pk8s -DREPOSITORY_PREFIX=${REPOSITORY_PREFIX} && ./scripts/pushImages.sh
+                sudo mvn spring-boot:build-image -Pk8s -DREPOSITORY_PREFIX=${REPOSITORY_PREFIX} && ./scripts/pushImages.sh
                 echo 'Images built'
                 '''
             }
