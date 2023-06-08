@@ -4,7 +4,7 @@ pipeline {
         DOCKERHUB_PASSWORD = credentials('dockerhub_password')
         KUBE_CONFIG = credentials('config')
 CREDENTIAL = credentials('CREDENTIALS')
-        REPOSITORY_PREFIX= ${DOCKERHUB_ID}
+        REPOSITORY_PREFIX= "dockerdev27"
     }
     agent any
    
