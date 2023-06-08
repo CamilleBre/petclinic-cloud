@@ -15,7 +15,7 @@ pipeline {
               sh '''
                 echo 'REPOSITORY_PREFIX',$REPOSITORY_PREFIX
                 mvn spring-boot:build-image -Pk8s -DREPOSITORY_PREFIX=${REPOSITORY_PREFIX}
-                ./scripts/pushImages.sh
+                https://github.com/Saidfali/spring-petclinic-cloud/blob/master/scripts/pushImages.sh
                 echo 'Images built'
                 '''
             }
