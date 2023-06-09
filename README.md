@@ -444,3 +444,5 @@ For pull requests, editor preferences are available in the [editor config](.edit
         - kubectl get pods -n spring-petclinic 
 8- Get the EXTERNAL-IP of the API Gateway:
         - kubectl get svc -n spring-petclinic api-gateway
+
+## TEST FOR TRIGGERING THE JENKINS BUILD
