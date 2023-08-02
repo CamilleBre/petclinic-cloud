@@ -45,13 +45,13 @@ jobs:
     - name: Push docker images
       run: |
         docker images
-        docker push $REPOSITORY_PREFIX/spring-petclinic-cloud-api-gateway
-        docker push $REPOSITORY_PREFIX/spring-petclinic-cloud-visits-service
-        docker push $REPOSITORY_PREFIX/spring-petclinic-cloud-vets-service
-        docker push $REPOSITORY_PREFIX/spring-petclinic-cloud-customers-service
-        docker push $REPOSITORY_PREFIX/spring-petclinic-cloud-admin-server
-        docker push $REPOSITORY_PREFIX/spring-petclinic-cloud-discovery-service
-        docker push $REPOSITORY_PREFIX/spring-petclinic-cloud-config-server
+        docker push $REPOSITORY_PREFIX:spring-petclinic-cloud-api-gateway
+        docker push $REPOSITORY_PREFIX:spring-petclinic-cloud-visits-service
+        docker push $REPOSITORY_PREFIX:spring-petclinic-cloud-vets-service
+        docker push $REPOSITORY_PREFIX:spring-petclinic-cloud-customers-service
+        docker push $REPOSITORY_PREFIX:spring-petclinic-cloud-admin-server
+        docker push $REPOSITORY_PREFIX:spring-petclinic-cloud-discovery-service
+        docker push $REPOSITORY_PREFIX/:spring-petclinic-cloud-config-server
 
   deploy-to-eks:
     name: "Build and Push to EKS"
