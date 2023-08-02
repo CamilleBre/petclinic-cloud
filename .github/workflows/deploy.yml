@@ -93,6 +93,9 @@ jobs:
         kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/master/k8s/init-services/07-vets-service-service.yaml
         kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/master/k8s/init-services/08-visits-service-service.yaml
         
+        # Secrets 
+        kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/master/k8s/secret.yaml
+
         # Db creation 
         helm repo add bitnami https://charts.bitnami.com/bitnami
         helm repo update
