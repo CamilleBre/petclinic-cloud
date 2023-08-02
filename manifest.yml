@@ -14,9 +14,9 @@ applications:
       SPRING_PROFILES_ACTIVE: cloud
     services:
       - customers-db
-      - config
-      - registry
-      - wavefront
+      #- config
+      #- registry
+      #- wavefront
 
   - name: vets-service
     path: spring-petclinic-vets-service/target/vets-service.jar
@@ -32,9 +32,9 @@ applications:
       SPRING_PROFILES_ACTIVE: cloud
     services:
       - vets-db
-      - config
-      - registry
-      - wavefront
+      #- config
+      #- registry
+      #- wavefront
 
   - name: visits-service
     path: spring-petclinic-visits-service/target/visits-service.jar
@@ -50,9 +50,9 @@ applications:
       SPRING_PROFILES_ACTIVE: cloud
     services:
       - visits-db
-      - config
-      - registry
-      - wavefront
+      #- config
+      #- registry
+      #- wavefront
 
   - name: api-gateway
     path: spring-petclinic-api-gateway/target/api-gateway.jar
@@ -65,6 +65,6 @@ applications:
       JBP_CONFIG_SPRING_AUTO_RECONFIGURATION: '{ enabled: false }'
       SPRING_PROFILES_ACTIVE: cloud
     services:
-      - config
-      - registry
-      - wavefront
+      #- config
+      #- registry
+      #- wavefront

@@ -31,17 +31,17 @@ spec:
           httpGet:
             port: 8080
             path: /actuator/health/readiness
-          initialDelaySeconds: 15
+          initialDelaySeconds: 90 #15
         lifecycle:
           preStop:
             exec:
               command: ["sh", "-c", "sleep 10"]
-        resources:
-          limits:
-            memory: 1Gi
-          requests:
-            cpu: 2000m
-            memory: 1Gi
+        #resources:
+        #  limits:
+        #    memory: 1Gi
+        #  requests:
+        #    cpu: 2000m
+        #    memory: 1Gi
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: kubernetes
