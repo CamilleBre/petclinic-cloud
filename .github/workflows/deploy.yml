@@ -9,6 +9,10 @@ on:
   #pull_request:
   #  branches: [ camille ]
 
+env : 
+  REPOSITORY_PREFIX : 885801475464.dkr.ecr.eu-west-3.amazonaws.com/ecr-petclinic
+
+
 # lancement des Jobs
 jobs:
   build:
@@ -22,78 +26,31 @@ jobs:
     - name: Run a one-line script
       run: echo "build DOCKER images!"
 
-  # Build des images avec "include" du workflow build.docker.image.yml
-  
-  # config-server
-  build-config-server:
-    uses:  CamilleBre/petclinic-cloud/.github/workflows/build-docker-image.yml@master
-    with:
-      image_name: spring-petclinic-config-server
-      tag:  3.0.2
-      port: 8888
-    secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  # discovery-server
-  build-discovery-server:
-    uses:  CamilleBre/petclinic-cloud/.github/workflows/build-docker-image.yml@master
-    with:
-      image_name: spring-petclinic-discovery-server
-      tag:  3.0.2
-      port: 8761
-    secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  # api-gateway => FRONT-END
-  build-api-gateway:
-    uses:  CamilleBre/petclinic-cloud/.github/workflows/build-docker-image.yml@master
-    with:
-      image_name: spring-petclinic-api-gateway
-      tag:  3.0.2
-      port: 8080
-    secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  # admin-server
-  build-admin-server:
-    uses: CamilleBre/petclinic-cloud/.github/workflows/build-docker-image.yml@master
-    with:
-      image_name: spring-petclinic-admin-server
-      tag:  3.0.2
-      port: 9090
-    secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  # customer-service
-  build-customers-service:
-    uses:  CamilleBre/petclinic-cloud/.github/workflows/build-docker-image.yml@master
-    with:
-      image_name: spring-petclinic-customers-service
-      tag:  3.0.2
-      port: 8081
-    secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  # vets-service
-  build-vets-service:
-    uses: CamilleBre/petclinic-cloud/.github/workflows/build-docker-image.yml@master
-    with:
-      image_name: spring-petclinic-vets-service
-      tag:  3.0.2
-      port: 8083
-    secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  # visits-server
-  build-visits-server:
-    uses: CamilleBre/petclinic-cloud/.github/workflows/build-docker-image.yml@master
-    with:
-      image_name: spring-petclinic-visits-service
-      tag:  3.0.2
-      port: 8082
-    secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  # Build des images avec maven
+    - name: Build images with maven
+      run: |
+        mvn spring-boot:build-image -Pk8s -DREPOSITORY_PREFIX=${REPOSITORY_PREFIX}
+    
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-west-3
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Push docker images
+      run: |
+      docker push $REPOSITORY_PREFIX/spring-petclinic-cloud-api-gateway:latest
+      docker push $REPOSITORY_PREFIX/spring-petclinic-cloud-visits-service:latest
+      docker push $REPOSITORY_PREFIX/spring-petclinic-cloud-vets-service:latest
+      docker push $REPOSITORY_PREFIX/spring-petclinic-cloud-customers-service:latest
+      docker push $REPOSITORY_PREFIX/spring-petclinic-cloud-admin-server:latest
+      docker push $REPOSITORY_PREFIX/spring-petclinic-cloud-discovery-service:latest
+      docker push $REPOSITORY_PREFIX/spring-petclinic-cloud-config-server:latest
 
   deploy-to-eks:
     name: "Build and Push to EKS"
