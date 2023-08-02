@@ -1,0 +1,142 @@
+# CI/CD PetClinic => Build et push sur ECR
+
+name: Petclinic > CI/CD > Github Actions
+# mise en place du Trigger
+on:
+  # Push ou Pull Request sur @camille
+  push:
+    branches: [ master ] 
+  #pull_request:
+  #  branches: [ camille ]
+
+# lancement des Jobs
+jobs:
+  build:
+    # Configuration de l'environnement
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ '17' ]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Run a one-line script
+      run: echo "build DOCKER images!"
+
+  # Build des images avec "include" du workflow build.docker.image.yml
+  
+  # config-server
+  build-config-server:
+    uses:  CamilleBre/petclinic-cloud/.github/workflows/build-docker-image.yml@master
+    with:
+      image_name: spring-petclinic-config-server
+      tag:  3.0.2
+      port: 8888
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  # discovery-server
+  build-discovery-server:
+    uses:  CamilleBre/petclinic-cloud/.github/workflows/build-docker-image.yml@master
+    with:
+      image_name: spring-petclinic-discovery-server
+      tag:  3.0.2
+      port: 8761
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  # api-gateway => FRONT-END
+  build-api-gateway:
+    uses:  CamilleBre/petclinic-cloud/.github/workflows/build-docker-image.yml@master
+    with:
+      image_name: spring-petclinic-api-gateway
+      tag:  3.0.2
+      port: 8080
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  # admin-server
+  build-admin-server:
+    uses: CamilleBre/petclinic-cloud/.github/workflows/build-docker-image.yml@master
+    with:
+      image_name: spring-petclinic-admin-server
+      tag:  3.0.2
+      port: 9090
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  # customer-service
+  build-customers-service:
+    uses:  CamilleBre/petclinic-cloud/.github/workflows/build-docker-image.yml@master
+    with:
+      image_name: spring-petclinic-customers-service
+      tag:  3.0.2
+      port: 8081
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  # vets-service
+  build-vets-service:
+    uses: CamilleBre/petclinic-cloud/.github/workflows/build-docker-image.yml@master
+    with:
+      image_name: spring-petclinic-vets-service
+      tag:  3.0.2
+      port: 8083
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  # visits-server
+  build-visits-server:
+    uses: CamilleBre/petclinic-cloud/.github/workflows/build-docker-image.yml@master
+    with:
+      image_name: spring-petclinic-visits-service
+      tag:  3.0.2
+      port: 8082
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  deploy-to-eks:
+    name: "Build and Push to EKS"
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-west-3
+
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+
+    - name: Update kube config
+      run: |
+        aws eks update-kubeconfig --name eks-petclinic
+
+    # Deploy the YAML files from the kubernetes folder
+    - name: Deploy Kubernetes resources
+      run: | 
+
+        kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/camille/k8s/init-namespace/01-namespace.yaml
+        
+        #kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/camille/k8s/secret.yaml
+
+        #kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/camille/k8s/api-gateway-deployment.yaml
+        #kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/camille/k8s/customers-service-deployment.yaml
+        #kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/camille/k8s/vets-service-deployment.yaml
+        #kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/camille/k8s/visits-service-deployment.yaml                         
+        kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/camille/k8s/init-services/02-config-map.yaml
+        kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/camille/k8s/init-services/02-system-config-map.yaml
+        kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/camille/k8s/init-services/03-role.yaml
+        #kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/camille/k8s/init-services/04-wavefront.yaml
+        kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/camille/k8s/init-services/05-api-gateway-service.yaml
+        kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/camille/k8s/init-services/06-customers-service-service.yaml
+        kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/camille/k8s/init-services/07-vets-service-service.yaml
+        kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/camille/k8s/init-services/08-visits-service-service.yaml
+        
+        
+      #kubectl apply --recursive -f https://github.com/CamilleBre/petclinic-cloud/tree/camille/k8s/
