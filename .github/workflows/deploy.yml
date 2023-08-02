@@ -100,7 +100,8 @@ jobs:
 
         helm repo add bitnami https://charts.bitnami.com/bitnami
         helm repo update
-        helm list --namespace spring-petclinic
+        helm uninstall visits-db-mysql --namespace spring-petclinic
+        helm uninstall vets-db-mysql --namespace spring-petclinic
         helm install vets-db-mysql bitnami/mysql --namespace spring-petclinic  --set auth.database=service_instance_db
         helm install visits-db-mysql bitnami/mysql --namespace spring-petclinic   --set auth.database=service_instance_db
         helm install customers-db-mysql bitnami/mysql --namespace spring-petclinic   --set auth.database=service_instance_db
