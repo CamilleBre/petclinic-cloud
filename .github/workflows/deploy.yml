@@ -102,9 +102,9 @@ jobs:
         helm repo update
         helm uninstall visits-db-mysql --namespace spring-petclinic
         helm uninstall vets-db-mysql --namespace spring-petclinic
-        helm install vets-db-mysql bitnami/mysql --namespace spring-petclinic  --set auth.database=service_instance_db
-        helm install visits-db-mysql bitnami/mysql --namespace spring-petclinic   --set auth.database=service_instance_db
-        helm install customers-db-mysql bitnami/mysql --namespace spring-petclinic   --set auth.database=service_instance_db
+        helm install vets-db-mysql bitnami/mysql --namespace spring-petclinic  --set auth.database=service_instance_db --set primary.persistence.enabled=false --set secondary.persistence.enabled=false
+        helm install visits-db-mysql bitnami/mysql --namespace spring-petclinic   --set auth.database=service_instance_db --set primary.persistence.enabled=false --set secondary.persistence.enabled=false
+        helm install customers-db-mysql bitnami/mysql --namespace spring-petclinic   --set auth.database=service_instance_db --set primary.persistence.enabled=false --set secondary.persistence.enabled=false
 
         # Deployment scripts 
         kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/master/k8s/api-gateway-deployment.yaml
