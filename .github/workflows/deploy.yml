@@ -3,11 +3,11 @@
 name: Petclinic > CI/CD > Github Actions
 # mise en place du Trigger
 on:
-  # Push ou Pull Request sur @camille
+  # Push ou Pull Request sur @master
   push:
     branches: [ master ] 
-  #pull_request:
-  #  branches: [ camille ]
+  pull_request:
+    branches: [ master ]
 
 env : 
   REPOSITORY_PREFIX : 885801475464.dkr.ecr.eu-west-3.amazonaws.com/ecr-petclinic
@@ -81,34 +81,17 @@ jobs:
 
         kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/master/k8s/init-namespace/01-namespace.yaml
         
-        #kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/camille/k8s/secret.yaml
-
-                        
+          
         kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/master/k8s/init-services/02-config-map.yaml
         kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/master/k8s/init-services/02-system-config-map.yaml
         kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/master/k8s/init-services/03-role.yaml
-        #kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/camille/k8s/init-services/04-wavefront.yaml
         kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/master/k8s/init-services/05-api-gateway-service.yaml
         kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/master/k8s/init-services/06-customers-service-service.yaml
         kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/master/k8s/init-services/07-vets-service-service.yaml
         kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/master/k8s/init-services/08-visits-service-service.yaml
-        
-        # Secrets 
-        #kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/master/k8s/secret.yaml
-
-        # Db creation --> only do once  
-
-        #helm repo add bitnami https://charts.bitnami.com/bitnami
-        #helm repo update
-        #helm uninstall visits-db-mysql --namespace spring-petclinic
-        #helm uninstall vets-db-mysql --namespace spring-petclinic
-        #helm install vets-db-mysql bitnami/mysql --namespace spring-petclinic  --set auth.database=service_instance_db --set primary.persistence.enabled=false --set secondary.persistence.enabled=false
-        #helm install visits-db-mysql bitnami/mysql --namespace spring-petclinic   --set auth.database=service_instance_db --set primary.persistence.enabled=false --set secondary.persistence.enabled=false
-        #helm install customers-db-mysql bitnami/mysql --namespace spring-petclinic   --set auth.database=service_instance_db --set primary.persistence.enabled=false --set secondary.persistence.enabled=false
 
         # Deployment scripts 
         kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/master/k8s/api-gateway-deployment.yaml
         kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/master/k8s/customers-service-deployment.yaml
         kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/master/k8s/vets-service-deployment.yaml
         kubectl apply -f https://raw.githubusercontent.com/CamilleBre/petclinic-cloud/master/k8s/visits-service-deployment.yaml 
-      #kubectl apply --recursive -f https://github.com/CamilleBre/petclinic-cloud/tree/camille/k8s/
