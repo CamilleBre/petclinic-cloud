@@ -1,0 +1,150 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{include "helm.fullname" .}}-api-gateway
+  labels:
+    {{- include "helm.labels" . | nindent 4}}
+  namespace: {{.Values.namespace}}
+spec:
+  replicas: {{.Values.api_gateway.replicaCount}}
+  selector:
+    matchLabels:
+      {{- include "helm.selectorLabels" . | nindent 6}}
+  template:
+    metadata:
+      labels:
+        {{- include "helm.selectorLabels" . | nindent 8}}
+    spec:
+      containers:
+        - name: api-gateway
+          image: {{.Values.ecr}}:{{.Values.api_gateway.image}}
+          ports:
+            - name: http
+              containerPort: {{ .Values.api_gateway.service.port }}
+              protocol: TCP
+          env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: kubernetes
+          - name: MANAGEMENT_METRICS_EXPORT_WAVEFRONT_URI
+            value: proxy://wavefront-proxy.spring-petclinic.svc.cluster.local:2878
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "helm.fullname" . }}-customers-service
+  labels:
+    {{- include "helm.labels" . | nindent 4 }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.customers_service.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "helm.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "helm.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: customers-service
+          image: {{ .Values.ecr }}:{{ .Values.customers_service.image}}
+          ports:
+            - name: http
+              containerPort: {{ .Values.customers_service.service.port }}
+              protocol: TCP
+          env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: kubernetes
+          - name: SPRING_DATASOURCE_URL
+            value: jdbc:mysql://customers-db-mysql.spring-petclinic.svc.cluster.local:3306/service_instance_db?queryInterceptors=brave.mysql8.TracingQueryInterceptor&exceptionInterceptors=brave.mysql8.TracingExceptionInterceptor&zipkinServiceName=customers-db
+          - name: SPRING_DATASOURCE_USERNAME
+            value: root
+          - name: SPRING_DATASOURCE_PASSWORD
+            valueFrom:
+                secretKeyRef:
+                  name: customers-db-mysql
+                  key: mysql-root-password
+          - name: MANAGEMENT_METRICS_EXPORT_WAVEFRONT_URI
+            value: proxy://wavefront-proxy.spring-petclinic.svc.cluster.local:2878
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "helm.fullname" . }}-vets-service
+  labels:
+    {{- include "helm.labels" . | nindent 4 }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.vets_service.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "helm.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "helm.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: api-gateway
+          image: {{ .Values.ecr }}:{{ .Values.vets_service.image}}
+          ports:
+            - name: http
+              containerPort: {{ .Values.vets_service.service.port }}
+              protocol: TCP
+          env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: kubernetes
+          - name: SPRING_DATASOURCE_URL
+            value: jdbc:mysql://vets-db-mysql.spring-petclinic.svc.cluster.local:3306/service_instance_db?queryInterceptors=brave.mysql8.TracingQueryInterceptor&exceptionInterceptors=brave.mysql8.TracingExceptionInterceptor&zipkinServiceName=vets-db
+          - name: SPRING_DATASOURCE_USERNAME
+            value: root
+          - name: SPRING_DATASOURCE_PASSWORD
+            valueFrom:
+                secretKeyRef:
+                  name: vets-db-mysql
+                  key: mysql-root-password
+          - name: MANAGEMENT_METRICS_EXPORT_WAVEFRONT_URI
+            value: proxy://wavefront-proxy.spring-petclinic.svc.cluster.local:2878
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "helm.fullname" . }}-visits-service
+  labels:
+    {{- include "helm.labels" . | nindent 4 }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.visits_service.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "helm.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "helm.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: api-gateway
+          image: {{ .Values.ecr }}:{{ .Values.visits_service.image}}
+          ports:
+            - name: http
+              containerPort: {{ .Values.visits_service.service.port }}
+              protocol: TCP
+          env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: kubernetes
+          - name: SPRING_DATASOURCE_URL
+            value: jdbc:mysql://visits-db-mysql.spring-petclinic.svc.cluster.local:3306/service_instance_db?queryInterceptors=brave.mysql8.TracingQueryInterceptor&exceptionInterceptors=brave.mysql8.TracingExceptionInterceptor&zipkinServiceName=visits-db
+          - name: SPRING_DATASOURCE_USERNAME
+            value: root
+          - name: SPRING_DATASOURCE_PASSWORD
+            valueFrom:
+                secretKeyRef:
+                  name: visits-db-mysql
+                  key: mysql-root-password
+          - name: MANAGEMENT_METRICS_EXPORT_WAVEFRONT_URI
+            value: proxy://wavefront-proxy.spring-petclinic.svc.cluster.local:2878

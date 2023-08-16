@@ -1,0 +1,53 @@
+namespace : dev 
+
+ecr: 885801475464.dkr.ecr.eu-west-3.amazonaws.com/ecr-petclinic
+
+api_gateway:
+  replicaCount: 1 
+  image: spring-petclinic-cloud-api-gateway
+  service:
+    type: LoadBalancer
+    port: 80
+    targetPort: 8080
+
+customers_service:
+  replicaCount: 1
+  image: spring-petclinic-cloud-customers-service
+  service:
+    type: ClusterIP
+    port: 8080
+    targetPort: 8080
+
+vets_service:
+  replicaCount: 1
+  image: spring-petclinic-cloud-vets-service
+  service:
+    type: ClusterIP
+    port: 8080
+    targetPort: 8080
+
+visits_service:
+  replicaCount: 1
+  image: spring-petclinic-cloud-visits-service
+  service:
+    type: ClusterIP
+    port: 8080
+    targetPort: 8080
+
+customers_db_mysql:
+  replicaCount: 1
+  image: mysql:5.7.8
+  service:
+    port: 3306
+
+vets_db_mysql:
+  replicaCount: 1
+  image: mysql:5.7.8
+  service:
+    port: 3306
+
+visits_db_mysql:
+  replicaCount: 1
+  image: mysql:5.7.8
+  service:
+    port: 3306
