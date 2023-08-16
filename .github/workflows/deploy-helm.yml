@@ -69,7 +69,7 @@ jobs:
         config-files: helm/values.yaml
         chart-path: helm/
         namespace: dev
-        release: helm-chart
+        name: helm-chart
 
 
 
