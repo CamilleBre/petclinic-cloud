@@ -78,4 +78,5 @@ jobs:
 
     # Deploy with helm 
     - name: Deploy helm charts
-      run: "helm install --namespace=$NAMESPACE helm-chart ../../helm --values=../../helm/values.yaml \n"
+      run: "pwd"
+      #helm install --namespace=$NAMESPACE helm-chart ../../helm --values=../../helm/values.yaml \n"
