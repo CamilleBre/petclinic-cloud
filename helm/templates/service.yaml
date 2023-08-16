@@ -4,7 +4,7 @@ metadata:
   name: {{ include "helm.fullname" . }}-api-gateway
   labels:
     {{- include "helm.labels" . | nindent 4 }}
-  namespace : {{ .Values.namespace}}
+  namespace : {{ .Release.Namespace }}
 spec:
   type: {{ .Values.api_gateway.service.type }}
   ports:
@@ -23,7 +23,7 @@ metadata:
   name: {{ include "helm.fullname" . }}-customers-service
   labels:
     {{- include "helm.labels" . | nindent 4 }}
-  namespace : {{ .Values.namespace}}
+  namespace : {{ .Release.Namespace }}
 spec:
   type: {{ .Values.customers_service.service.type }}
   ports:
@@ -42,7 +42,7 @@ metadata:
   name: {{ include "helm.fullname" . }}-vets-service
   labels:
     {{- include "helm.labels" . | nindent 4 }}
-  namespace : {{ .Values.namespace}}
+  namespace : {{ .Release.Namespace }}
 spec:
   type: {{ .Values.vets_service.service.type }}
   ports:
@@ -61,7 +61,7 @@ metadata:
   name: {{ include "helm.fullname" . }}-visits-service
   labels:
     {{- include "helm.labels" . | nindent 4 }}
-  namespace : {{ .Values.namespace}}
+  namespace : {{ .Release.Namespace }}
 spec:
   type: {{ .Values.visits_service.service.type }}
   ports:

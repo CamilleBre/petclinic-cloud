@@ -5,7 +5,7 @@ metadata:
   name: {{include "helm.fullname" .}}-api-gateway
   labels:
     {{- include "helm.labels" . | nindent 4}}
-  namespace: {{.Values.namespace}}
+  namespace: {{ .Release.Namespace }}
 spec:
   replicas: {{.Values.api_gateway.replicaCount}}
   selector:
@@ -36,7 +36,7 @@ metadata:
   name: {{ include "helm.fullname" . }}-customers-service
   labels:
     {{- include "helm.labels" . | nindent 4 }}
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Release.Namespace }}
 spec:
   replicas: {{ .Values.customers_service.replicaCount }}
   selector:
@@ -76,7 +76,7 @@ metadata:
   name: {{ include "helm.fullname" . }}-vets-service
   labels:
     {{- include "helm.labels" . | nindent 4 }}
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Release.Namespace }}
 spec:
   replicas: {{ .Values.vets_service.replicaCount }}
   selector:
@@ -116,7 +116,7 @@ metadata:
   name: {{ include "helm.fullname" . }}-visits-service
   labels:
     {{- include "helm.labels" . | nindent 4 }}
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Release.Namespace }}
 spec:
   replicas: {{ .Values.visits_service.replicaCount }}
   selector:

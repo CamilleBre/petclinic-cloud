@@ -1,12 +1,10 @@
-namespace : dev 
-
 ecr: 885801475464.dkr.ecr.eu-west-3.amazonaws.com/ecr-petclinic
 
 api_gateway:
-  replicaCount: 1 
+  replicaCount: 1
   image: spring-petclinic-cloud-api-gateway
   service:
-    type: LoadBalancer
+    type: NodePort
     port: 80
     targetPort: 8080
 
