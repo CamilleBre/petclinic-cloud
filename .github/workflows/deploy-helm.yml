@@ -66,10 +66,8 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: eu-west-3
         cluster-name: eks-petclinic
-        #config-files: values.yaml
-        #chart-path: /home/runner/work/petclinic-cloud/petclinic-cloud/helm
-        chart: app
-        #values: ./helm/values.yaml
+        config-files: helm/values.yaml
+        chart-path: helm
         namespace: dev
         name: helm-chart
 
