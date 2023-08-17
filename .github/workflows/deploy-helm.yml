@@ -59,6 +59,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - uses: actions/checkout@v3
     - name: Deploy Helm
       uses: bitovi/github-actions-deploy-eks-helm@v1.2.4
       with:
