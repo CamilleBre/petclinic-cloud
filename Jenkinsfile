@@ -9,7 +9,7 @@ pipeline {
         steps {
           script{
           sh '''
-            PATH=$PATH:/usr/local/bin
+            ls 
             brew install maven
             mvn spring-boot:build-image -Pk8s -DREPOSITORY_PREFIX=${REPOSITORY_PREFIX}
             echo 'Images built'
