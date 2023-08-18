@@ -60,6 +60,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Update kube config
+      run: |
+        rm -Rf ~/.kube
+        aws eks update-kubeconfig --name eks-petclinic
     - name: Deploy Helm
       uses: bitovi/github-actions-deploy-eks-helm@v1.2.4
       with:
