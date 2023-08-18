@@ -60,17 +60,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Deploy Helm
-      uses: bitovi/github-actions-deploy-eks-helm@v1.2.4
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: eu-west-3
-        cluster-name: eks-petclinic
-        config-files: helm/values.yaml
-        chart-path: helm
-        namespace: dev
-        name: helm-chart
+    #- name: Deploy Helm
+    #  uses: bitovi/github-actions-deploy-eks-helm@v1.2.4
+    #  with:
+    #    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #    aws-region: eu-west-3
+    #    cluster-name: eks-petclinic
+    #    config-files: helm/values.yaml
+    #    chart-path: helm
+    #    namespace: dev
+    #    name: helm-chart
 
 
 
@@ -87,10 +87,10 @@ jobs:
     #   uses: aws-actions/amazon-ecr-login@v1
 
 
-    # - name: Update kube config
-    #   run: |
-    #     aws eks update-kubeconfig --name eks-petclinic
+    - name: Update kube config
+      run: |
+        aws eks update-kubeconfig --name eks-petclinic
 
-    # # Deploy with helm 
-    # - name: Deploy helm charts
-    #   run: "helm install --namespace=$NAMESPACE helm-chart ./helm --values=./helm/values.yaml \n"
+    # Deploy with helm 
+    - name: Deploy helm charts
+      run: "helm upgrade --install  dev-chart ./helm --values=./helm/values.yaml --namespace dev --create-namespace \n"
