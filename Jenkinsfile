@@ -1,6 +1,6 @@
 pipeline {
     environment {
-        REPOSITORY_PREFIX: 885801475464.dkr.ecr.eu-west-3.amazonaws.com/ecr-petclinic
+        REPOSITORY_PREFIX: "885801475464.dkr.ecr.eu-west-3.amazonaws.com/ecr-petclinic"
     }
     agent any
    
