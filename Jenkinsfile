@@ -3,14 +3,18 @@ pipeline {
         REPOSITORY_PREFIX = "885801475464.dkr.ecr.eu-west-3.amazonaws.com/ecr-petclinic"
     }
     agent any
+    tools { 
+      maven 'MAVEN_HOME' 
+      jdk 'JAVA_HOME' 
+    }
    
     stages {
       stage('Build Images') {
         steps {
           script{
           sh '''
-            export PATH=$PATH:/usr/local/bin
-            brew install maven
+            echo "PATH = ${PATH}"
+            echo "M2_HOME = ${M2_HOME}"
             mvn spring-boot:build-image -Pk8s -DREPOSITORY_PREFIX=${REPOSITORY_PREFIX}
             echo 'Images built'
             sleep 6
