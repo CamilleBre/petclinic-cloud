@@ -9,6 +9,7 @@ pipeline {
         steps {
           script{
           sh '''
+            brew install maven
             mvn spring-boot:build-image -Pk8s -DREPOSITORY_PREFIX=${REPOSITORY_PREFIX}
             echo 'Images built'
             sleep 6
