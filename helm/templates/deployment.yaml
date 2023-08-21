@@ -58,7 +58,7 @@ spec:
           - name: SPRING_PROFILES_ACTIVE
             value: kubernetes
           - name: SPRING_DATASOURCE_URL
-            value: jdbc:mysql://customers-db-mysql:3306/service_instance_db?queryInterceptors=brave.mysql8.TracingQueryInterceptor&exceptionInterceptors=brave.mysql8.TracingExceptionInterceptor&zipkinServiceName=customers-db
+            value: jdbc:mysql://customers-db-mysql.spring-petclinic.svc.cluster.local:3306/service_instance_db?queryInterceptors=brave.mysql8.TracingQueryInterceptor&exceptionInterceptors=brave.mysql8.TracingExceptionInterceptor&zipkinServiceName=customers-db
           - name: SPRING_DATASOURCE_USERNAME
             value: root
           - name: SPRING_DATASOURCE_PASSWORD
@@ -88,7 +88,7 @@ spec:
         {{- include "helm.selectorLabels" . | nindent 8 }}
     spec:
       containers:
-        - name: api-gateway
+        - name: vets-service
           image: {{ .Values.ecr }}:{{ .Values.vets_service.image}}
           ports:
             - name: http
@@ -98,7 +98,7 @@ spec:
           - name: SPRING_PROFILES_ACTIVE
             value: kubernetes
           - name: SPRING_DATASOURCE_URL
-            value: jdbc:mysql://vets-db-mysql:3306/service_instance_db?queryInterceptors=brave.mysql8.TracingQueryInterceptor&exceptionInterceptors=brave.mysql8.TracingExceptionInterceptor&zipkinServiceName=vets-db
+            value: jdbc:mysql://vets-db-mysql.spring-petclinic.svc.cluster.local:3306/service_instance_db?queryInterceptors=brave.mysql8.TracingQueryInterceptor&exceptionInterceptors=brave.mysql8.TracingExceptionInterceptor&zipkinServiceName=vets-db
           - name: SPRING_DATASOURCE_USERNAME
             value: root
           - name: SPRING_DATASOURCE_PASSWORD
@@ -128,7 +128,7 @@ spec:
         {{- include "helm.selectorLabels" . | nindent 8 }}
     spec:
       containers:
-        - name: api-gateway
+        - name: visits-service
           image: {{ .Values.ecr }}:{{ .Values.visits_service.image}}
           ports:
             - name: http
@@ -138,7 +138,7 @@ spec:
           - name: SPRING_PROFILES_ACTIVE
             value: kubernetes
           - name: SPRING_DATASOURCE_URL
-            value: jdbc:mysql://visits-db-mysql:3306/service_instance_db?queryInterceptors=brave.mysql8.TracingQueryInterceptor&exceptionInterceptors=brave.mysql8.TracingExceptionInterceptor&zipkinServiceName=visits-db
+            value: jdbc:mysql://visits-db-mysql.spring-petclinic.svc.cluster.local:3306/service_instance_db?queryInterceptors=brave.mysql8.TracingQueryInterceptor&exceptionInterceptors=brave.mysql8.TracingExceptionInterceptor&zipkinServiceName=visits-db
           - name: SPRING_DATASOURCE_USERNAME
             value: root
           - name: SPRING_DATASOURCE_PASSWORD

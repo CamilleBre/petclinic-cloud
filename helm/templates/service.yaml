@@ -72,22 +72,3 @@ spec:
   selector:
     {{- include "helm.selectorLabels" . | nindent 4 }}
     app : visits-service
-
-    ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "helm.fullname" . }}-customers-db
-  labels:
-    {{- include "helm.labels" . | nindent 4 }}
-  namespace : {{ .Release.Namespace }}
-spec:
-  type: {{ .Values.customers_db_mysql.service.type }}
-  ports:
-    - port: {{ .Values.customers_db_mysql.service.port }}
-      targetPort: {{ .Values.customers_db_mysql.service.targetPort }}
-      protocol: TCP
-      name: http
-  selector:
-    {{- include "helm.selectorLabels" . | nindent 4 }}
-    app : customers-db
