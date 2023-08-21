@@ -4,7 +4,7 @@ api_gateway:
   replicaCount: 1
   image: spring-petclinic-cloud-api-gateway
   service:
-    type: NodePort
+    type: LoadBalancer
     port: 80
     targetPort: 8080
 
