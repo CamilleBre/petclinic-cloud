@@ -79,9 +79,9 @@ jobs:
 
     #- name: Create namespace
     #  run: "kubectl create namespace dev \n#magic___^_^___line\n"
-    - name: Create databases
-      run: |
-        bash ./scripts/database_creation.sh
+    #- name: Create databases
+    #  run: |
+    #    bash ./scripts/database_creation.sh
 
     - name: Deploy Helm
       uses: bitovi/github-actions-deploy-eks-helm@v1.2.4
