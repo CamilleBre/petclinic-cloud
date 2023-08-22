@@ -60,8 +60,8 @@ jobs:
         #docker push $REPOSITORY_PREFIX:spring-petclinic-cloud-discovery-service
         #docker push $REPOSITORY_PREFIX/:spring-petclinic-cloud-config-server
 
-        docker push $REPOSITORY_PREFIX/:prometheus-server
-        docker push $REPOSITORY_PREFIX/:grafana-server
+        docker push $REPOSITORY_PREFIX:prometheus-server
+        docker push $REPOSITORY_PREFIX:grafana-server
 
   deploy-to-eks:
     name: "Build and Push to EKS"
