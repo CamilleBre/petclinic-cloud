@@ -85,7 +85,7 @@ jobs:
       run: |
         cd ./terraform
         terraform init
-        terraform apply
+        terraform apply -auto-approve
 
 
     - name: Update kube config
