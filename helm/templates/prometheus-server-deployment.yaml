@@ -26,7 +26,7 @@ spec:
         io.kompose.service: prometheus-server
     spec:
       containers:
-        - image: prometheus-server
+        - image: {{.Values.ecr}}:prometheus-server
           name: prometheus-server
           ports:
             - containerPort: 9090

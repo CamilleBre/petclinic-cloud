@@ -33,6 +33,11 @@ jobs:
       run: |
         mvn spring-boot:build-image -Pk8s -DREPOSITORY_PREFIX=${REPOSITORY_PREFIX}
 
+    - name: Build images grafana and prometheus
+      # Build des images avec docker 
+      run: |
+        docker build -t $REPOSITORY_PREFIX:prometheus-server ./docker/prometheus
+        docker build -t $REPOSITORY_PREFIX:grafana-server ./docker/grafana
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -54,6 +59,9 @@ jobs:
         #docker push $REPOSITORY_PREFIX:spring-petclinic-cloud-admin-server
         #docker push $REPOSITORY_PREFIX:spring-petclinic-cloud-discovery-service
         #docker push $REPOSITORY_PREFIX/:spring-petclinic-cloud-config-server
+
+        docker push $REPOSITORY_PREFIX/:prometheus-server
+        docker push $REPOSITORY_PREFIX/:grafana-server
 
   deploy-to-eks:
     name: "Build and Push to EKS"

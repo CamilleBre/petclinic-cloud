@@ -26,7 +26,7 @@ spec:
         io.kompose.service: grafana-server
     spec:
       containers:
-        - image: grafana-server
+        - image: {{.Values.ecr}}:grafana-server
           name: grafana-server
           ports:
             - containerPort: 3000
