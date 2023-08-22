@@ -81,6 +81,12 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
+    - name: Create EKS with terraform
+      run: |
+        terraform init ./terraform
+        terraform apply ./terraform
+
+
     - name: Update kube config
       run: |
         aws eks update-kubeconfig --name eks-petclinic
