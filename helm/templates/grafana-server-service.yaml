@@ -10,11 +10,11 @@ metadata:
   name: grafana-server
   namespace: {{ .Release.Namespace }}
 spec:
+  type: NodePort
   ports:
     - name: "3000"
       port: 3000
       targetPort: 3000
   selector:
     io.kompose.service: grafana-server
-status:
-  loadBalancer: {}
+

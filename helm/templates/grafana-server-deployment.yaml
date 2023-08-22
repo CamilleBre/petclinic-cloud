@@ -36,4 +36,3 @@ spec:
             limits:
               memory: "268435456"
       restartPolicy: Always
-status: {}
