@@ -83,8 +83,8 @@ jobs:
 
     - name: Create EKS with terraform
       run: |
-        terraform init ./terraform
-        terraform apply ./terraform
+        terraform init
+        terraform apply
 
 
     - name: Update kube config
