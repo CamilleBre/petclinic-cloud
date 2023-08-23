@@ -16,6 +16,9 @@ env:
   CLUSTER_NAME: "demo"
   AWS_ACCOUNT: "${{ vars.AWS_ACCOUNT_ID }}"
 
+permissions:
+  id-token: write
+  contents: read
 
 # lancement des Jobs
 jobs:
